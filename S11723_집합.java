@@ -10,10 +10,9 @@ public class S11723_집합 {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
 
-        Set<Integer> set = new HashSet<>();
         int num = 0;
 
-        Stream<Integer> stream;
+        int bit = 0;
 
         int Test = Integer.parseInt(br.readLine());
         for(int i=0; i<Test; i++)
@@ -23,32 +22,28 @@ public class S11723_집합 {
             switch (od){
                 case "add":
                     num = Integer.parseInt(st.nextToken());
-                    set.add(num);
+                    bit = bit | (1 << num);
                     break;
                 case "check":
                     num = Integer.parseInt(st.nextToken());
-                    if(set.contains(num))
+                    if((bit & (1 << num)) != 0)
                         sb.append(1).append("\n");
                     else
                         sb.append(0).append("\n");
                     break;
                 case "remove":
                     num = Integer.parseInt(st.nextToken());
-                    set.remove(num);
+                    bit = bit & ~( 1 << num);
                     break;
                 case "toggle":
                     num = Integer.parseInt(st.nextToken());
-                    if(set.contains(num))
-                        set.remove(num);
-                    else
-                        set.add(num);
+                    bit = bit ^ (1 << num);
                     break;
                 case "all":
-                    stream = Stream.iterate(1, n -> n+1).limit(20);
-                    set = new HashSet<>(stream.collect(Collectors.toList()));
+                    bit = bit | (~0);
                     break;
                 case "empty":
-                    set = new HashSet<>();
+                    bit = 0;
                     break;
             }
 
