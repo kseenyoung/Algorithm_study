@@ -18,10 +18,10 @@ while q:
             continue
         if visited[nx] == -1:  # 처음 방문하는 경우가 최단거리
             if nx == x * 2:
-                visited[nx] = visited[x]
-                q.appendleft(nx)
-            else:
+                visited[nx] = visited[x]  # x*2의 위치는 가중치가 0
+                q.appendleft(nx)  # appendleft를 통해 우선순위로 둔다
+            else:   # x 은 가중치가 1
                 visited[nx] = visited[x] + 1
-                q.append(x)
+                q.append(nx)
 
 print(visited[K])
