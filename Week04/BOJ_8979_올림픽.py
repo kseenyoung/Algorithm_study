@@ -1,30 +1,13 @@
-N, K = map(int, input().split())
-score = []
-result = []
-grade = 1
-i = 1
+import sys
+input = sys.stdin.readline
 
-for _ in range(N):
-    score.append(list(map(int, input().split())))
+N, K = tuple(map(int, input().split()))
+arr = [list(map(int, input().split())) for _ in range(N)]
+arr.sort(key=lambda x: (x[1], x[2], x[3]), reverse=True)
 
-while score:
-    score.sort(key=lambda x: x[i], reverse=True)
-    count = 0
-    for k in range(1, len(score)):
-        if score[k][1] == score[0][1]:
-            count += 1
-        else:
-            break
-    if count > 0:
-        for c in range(count):
-            result.append([score[0][0], grade])
-            score.pop(0)
-        grade += count
-    else:
-        result.append([score[0][0], grade])
-        score.pop(0)
-        grade += 1
-    i += 1
+grade = [arr[i][0] for i in range(N)].index(K)   # K 국가의 등수
 
-result.sort(key=lambda x:x[0])
-print(result[K-1][1])
+for i in range(N):
+    if arr[i][1:] == arr[grade][1:]:  # 처음 자신이랑 동점인 국가가 나오면 그 등수로, 아니면 자기 자신의 등수 그대로
+        print(i+1)
+        exit(0)
