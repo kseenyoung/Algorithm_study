@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 public class S20055_컨베어벨트_위의_로봇 {
-    static int countRobot = 0;
+    static int countHp=0, result = 0, K;
     static Deque<Kan> up, down;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -10,58 +10,82 @@ public class S20055_컨베어벨트_위의_로봇 {
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N  = Integer.parseInt(st.nextToken());
-        int K  = Integer.parseInt(st.nextToken());
+        K  = Integer.parseInt(st.nextToken());
 
         up = new ArrayDeque<>();
         down = new ArrayDeque<>();
 
         st = new StringTokenizer(br.readLine());
-        for(int i=0; i<N; i++){
+        for(int i=0; i<2*N; i++){
             Kan kan = new Kan(Integer.parseInt(st.nextToken()));
             if(i < N){
-                up.add(kan);
+                up.offer(kan);
             } else{
-                down.add(kan);
+                down.offerFirst(kan);
             }
         }
 
-        while(countRobot > 0){
+        while(countHp < K){
             rotation();
             moveRobot();
-
+            setRobot();
+            result++;
         }
 
+        bw.write(sb.append(result).toString());
+        bw.flush();
+        bw.close();
 
     }
 
-    public static int rotation(){
+    public static void setRobot(){
+        Kan first = up.peek();
+        if(first.hp > 0){
+            first.isRobot = true;
+            first.hp--;
+            if(first.hp == 0)
+                countHp++;
+        }
+    }
+
+    public static void rotation(){
         Kan toUp = down.poll();
+        if(toUp.isRobot){
+            toUp.hp--;
+            if(toUp.hp == 0) countHp++;
+        }
+
         Kan toDown = up.pollLast();
+        if(toDown.isRobot){
+            toDown.hp--;
+            if(toDown.hp == 0) countHp++;
+        }
+
         up.offerFirst(toUp);
         down.offerLast(toDown);
+
         checkDown();
-        return 1;
     }
 
     public static void checkDown(){
         // 내리는 위치 확인
-        Kan lastUp = up.peekLast();
-        if(lastUp.isRobot){
-            lastUp.isRobot = false;
-            countRobot--;
-        }
+        up.peekLast().isRobot = false;
     }
 
-    public static int moveRobot(){
+    public static void moveRobot(){
         Object[] upArray = up.toArray();
-        for(int i=up.size()-2; i>=0; i--){
-            if(((Kan)upArray[i]).isRobot && !((Kan)upArray[i+1]).isRobot){
-                ((Kan)(upArray[i])).isRobot = false;
-                ((Kan)(upArray[i])).isRobot = true;
+        for(int i=up.size()-2; i>=0; i--) {
+            Kan from = ((Kan) upArray[i]);
+            Kan to = ((Kan) upArray[i + 1]);
+            if (from.isRobot && !to.isRobot && to.hp > 0) {
+                from.isRobot = false;
+                to.isRobot = true;
+                to.hp--;
+                if (to.hp == 0)
+                    countHp++;
             }
         }
         checkDown();
-        return 2;
     }
 }
 
