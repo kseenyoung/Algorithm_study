@@ -1,28 +1,31 @@
 import sys
+from collections import defaultdict
 input = sys.stdin.readline
 
-T = int(input())
-for test in range(T):
-    result = [1e9, -1]
+for test in range(int(input())):
+    result = [10000, -1]
 
-    W = input()
+    W = input().rstrip()
     K = int(input())
 
-    for i in range(len(W)):
-        for j in range(2, len(W) - i):
-            temp = W[i:i+j]
-            # K개 가진 알파벳 확인
-            flag = False
-            for k in range(ord("a"), ord("z")+1):
-                # print(temp, temp.count(chr(k)), chr(k))
-                if temp.count(chr(k)) == K:
-                    if result[0] > len(temp):
-                        # print("min: ", temp)
-                        result[0] = len(temp)
-                    if temp[0] == chr(k) and temp[0] == temp[-1] and result[1] < len(temp):
-                        # print("max: ", temp)
-                        result[1] = len(temp)
-    if result[0] != 1e9 and result[1] != -1:
-        print(result[0], result[1])
-    else:
+    # W에 속하는 알파벳
+    alphabets = list(map(lambda x : ord(x) - 97, W.strip()))  # [18, 20, 15, 4, 17, 0, 16, 20, 0, 19, 14, 17, 13, 0, 3, 14]
+    dic = defaultdict(list)
+    for idx, alpha in enumerate(alphabets):
+        dic[alpha].append(idx)  # 해당 알파벳 번호의 발견 위치들 저장
+
+    # 저장된 알파벳의
+    for alpha_list in dic.values():
+        # 해당 알파벳의 개수가 K개 이상일 때만 진행
+        if len(alpha_list) >= K:
+            for j in range(len(alpha_list) - K + 1):
+                #
+                alpha_len = alpha_list[j + K - 1] - alpha_list[j] + 1
+                if alpha_len < result[0]:
+                    result[0] = alpha_len
+                if alpha_len > result[1]:
+                    result[1] = alpha_len
+    if result[0] == 10000 or result[1] == -1:
         print(-1)
+    else:
+        print(result[0], result[1])
