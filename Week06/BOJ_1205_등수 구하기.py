@@ -12,7 +12,8 @@ if N > 0:
         if newScore < score[i]:
             grade += 1
         else:
-            print(grade)
-            exit(0)
+            break
+    print(grade)
+
 else:
     print(grade)
