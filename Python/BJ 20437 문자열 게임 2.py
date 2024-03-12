@@ -19,7 +19,7 @@ for test in range(int(input())):
         # 해당 알파벳의 개수가 K개 이상일 때만 진행
         if len(alpha_list) >= K:
             for j in range(len(alpha_list) - K + 1):
-                #
+                # j : 윈도우의 크기
                 alpha_len = alpha_list[j + K - 1] - alpha_list[j] + 1
                 if alpha_len < result[0]:
                     result[0] = alpha_len
