@@ -9,9 +9,6 @@ def func(pw):
         print("<{}> is not acceptable.".format(''.join(pw)))
         return
 
-    consonantCount = 0
-    vowelCount = 0
-
     for i in range(len(pw) - 2):
         if isVowel(pw[i]) and isVowel(pw[i + 1]) and isVowel(pw[i + 2]):
             print("<{}> is not acceptable.".format(''.join(pw)))
