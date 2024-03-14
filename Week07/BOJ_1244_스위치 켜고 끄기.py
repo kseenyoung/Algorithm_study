@@ -12,23 +12,24 @@ input = sys.stdin.readline
 def male(x):
     tmp = x
     while 1:
-        if tmp >= N:
+        if tmp-1 >= N:
             return
         switch[tmp - 1] = abs(switch[tmp - 1] - 1)
         tmp += x
 
-
 def female(x):
-    limit = min(x, N - x)
-    switch[limit - 1] = abs(switch[limit - 1] - 1)
-    for i in range(1, limit):
-        if switch[limit - i - 1] != switch[limit + i - 1]:  # 스위치의 상태가 같지 않다면
-            break
+    switch[x-1] = abs(switch[x-1]-1)
+    i = 1
+    while 1:
+        if not (0 <= x-i-1 < N) or not (0 <= x+i-1 < N):
+            return
         else:
-            switch[limit - i - 1] = abs(switch[limit - i - 1] - 1)
-            switch[limit + i - 1] = abs(switch[limit + i - 1] - 1)
-    return
-
+            if switch[x-i-1] == switch[x+i-1]:
+                switch[x - i - 1] = abs(switch[x - i - 1] - 1)
+                switch[x + i - 1] = abs(switch[x + i - 1] - 1)
+            else:
+                return
+        i += 1
 
 N = int(input())  # 스위치 개수
 switch = list(map(int, input().split()))
@@ -40,12 +41,9 @@ for gender, num in student:
     else:
         female(num)
 
-if N > 20:
-    i = 0
-    while 1:
-        if i+20 >= N:
-            break
-        print(*switch[i:i+20])
-    print(*switch[i:])
-else:
-    print(*switch)
+i = 0
+while i < N:
+    print(*switch[i:i+20])
+    i += 20
+
+
