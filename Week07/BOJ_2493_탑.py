@@ -1,10 +1,8 @@
 from collections import deque
-import copy
 import heapq as hq
 
 N = int(input())
 top = deque(map(int, input().split()))
-first = copy.deepcopy(top)
 tmp = []
 ans = [0]*N
 
