@@ -14,7 +14,7 @@ for i in range(N - 1, -1, -1):    # 탑의 오른쪽부터 탐색
                 tmp.pop()
             else:
                 break
-    hq.heappush(tmp, [-top.pop(), i])   # 내림차순으로 정렬
 
+    hq.heappush(tmp, [-top.pop(), i])   # 내림차순으로 정렬
 
 print(*ans)
