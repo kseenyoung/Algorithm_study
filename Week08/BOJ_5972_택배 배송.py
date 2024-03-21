@@ -1,31 +1,28 @@
-import sys, heapq
+import sys, heapq as hq
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
 graph = [[] for _ in range(N+1)]
-distance = [sys.maxsize for _ in range(N+1)]
+distance = [sys.maxsize]*(N+1)
 
 for _ in range(M):
-    a, b, cost = map(int, input().split())
-    graph[a].append([cost, b])
-    graph[b].append([cost, a])
+    a, b, c = map(int, input().split())
+    graph[a].append([c, b])  # 양방향 그래프
+    graph[b].append([c, a])
 
-def dijkstra():
-    q = []
-    distance[1] = 0 # 현서가 출발하는 위치 1
-    heapq.heappush(q, [0, 1])  #  dist, node
 
-    while q:
-        print(q)
-        dist, node = heapq.heappop(q)
-        if distance[node] < dist:
-            continue
-        for next in graph[node]:   # next : (node, cost)
-            cost = next[1] + distance[node]
-            if cost < distance[next[0]]:
-                distance[next[0]] = cost
-                heapq.heappush(q, [cost, next[0]])
+q = []
+distance[1] = 0  # 현서는 1에서 출발
+hq.heappush(q, [0, 1])  # cost 를 먼저 넣어서 낮은 것부터 앞으로 오게 함
 
-dijkstra()
+while q:
+    now_cost, now_node = hq.heappop(q)
+    if now_cost > distance[now_node]:  # 현재 노드의 코스트가 이미 저장된 코스트보다 크다면 건너뜀
+        continue
+
+    for next_cost, next_node in graph[now_node]:  # 현제 노드에서 갈 수 있는 것 찾음.
+        if next_cost + distance[now_node] < distance[next_node]:  #  다음으로 갈 수 있는 노드까지의 코스트보다 작다면
+            hq.heappush(q, [next_cost + distance[now_node] , next_node])  # q 와 distance 를 업데이트함
+            distance[next_node] = next_cost + distance[now_node]
+
 print(distance[N])
-
