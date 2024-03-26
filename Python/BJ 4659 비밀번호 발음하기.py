@@ -1,43 +1,40 @@
 import sys
+
 input = sys.stdin.readline
 
-mo = set(["a", "e", "i", "o", "u"])
-ja = set(["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"])
+mo = {"a", "e", "i", "o", "u"}
 
-while(True):
+while True:
     password = input().strip()
-    if(password == "end"):
+    if password == "end":
         break
+
     if "a" in password or "e" in password or "i" in password or "o" in password or "u" in password:
-        countRepeat = 0
-        check = -1  # 1 : 모음, 2 : 자음
+        m_cnt = 0
+        j_cnt = 0
         flag = False
-        for idx, p in enumerate(password):
-            # p가 모음인지 자음인지 & 연속되는가?
+
+        for i, p in enumerate(password):
+            if i > 0:
+                if p == password[i - 1] and p != "e" and p != "o":
+                    flag = True
+                    break
             if p in mo:
-                if check == 1:
-                    if countRepeat == 2:
-                        flag = True
-                        break
-                    else:
-                        if password[idx] == password[idx-1] and password[idx] != "o" and password[idx] != 'e':
-                            print("<" + password + "> is not acceptable.")
-                        countRepeat += 1
-                check = 1
+                m_cnt += 1
+                j_cnt = 0
+                if m_cnt == 3:
+                    flag = True
+                    break
             else:
-                if check == 2:
-                    if countRepeat == 2:
-                        flag = True
-                        break
-                    else:
-                        if password[idx] == password[idx - 1]:
-                            print("<" + password + "> is not acceptable.")
-                        countRepeat += 1
-                check = 2
+                m_cnt = 0
+                j_cnt += 1
+                if j_cnt == 3:
+                    flag = True
+                    break
 
         if flag:
             print("<" + password + "> is not acceptable.")
         else:
-            print("<"+password+"> is acceptable.")
+            print("<" + password + "> is acceptable.")
     else:
-        print("<"+password+"> is not acceptable.")
+        print("<" + password + "> is not acceptable.")
